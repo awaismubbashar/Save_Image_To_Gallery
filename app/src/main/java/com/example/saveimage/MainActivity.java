@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bm;
     String extStorageDirectory;
     ImageView imageView;
-    Button imageFromGallery, imageFromCamera,saveBtn;
+    Button imageFromGallery, imageFromCamera, saveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         imageFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               openGallery(v);
+                openGallery(v);
             }
         });
         imageFromCamera.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(selectedImage);
                 imageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
@@ -117,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
     public void save() throws IOException {
 
 
-      //  File file = new File(extStorageDirectory, "er.PNG");
+//        File file = new File(extStorageDirectory, "er.PNG");
 //        Toast.makeText(MainActivity.this, "111", Toast.LENGTH_SHORT).show();
-        try {
+//        try {
 //            File dir = new File(Environment.getExternalStorageDirectory() + "/awais");
 //            if (!dir.exists()){
 //                File mydir = new File("/DCIM/awais/");
@@ -130,22 +131,30 @@ public class MainActivity extends AppCompatActivity {
 //            }else{
 //                Log.d(TAG, "dir already exist: ");
 //            }
-            File dir = new File( Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DCIM),"Pola" );
+    try{
 
-            FileOutputStream outStream = new FileOutputStream(dir);
-            Toast.makeText(this, "file saved at " +dir, Toast.LENGTH_SHORT).show();
-            bm.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            Toast.makeText(this, "file saved at " +dir, Toast.LENGTH_SHORT).show();
-            outStream.flush();
-            outStream.close();
+        BitmapDrawable bitmapDrawable= (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap=bitmapDrawable.getBitmap();
 
-            Toast.makeText(MainActivity.this, "Saved", Toast.LENGTH_LONG).show();
 
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        File f = Environment.getExternalStorageDirectory();
+
+        File dir = new File(f.getAbsolutePath(), "/DCIM/");
+        File f1=new File(dir,System.currentTimeMillis()+".jpg");
+        OutputStream outStream = new FileOutputStream(f1);
+        Toast.makeText(this, "file saved at " + dir, Toast.LENGTH_SHORT).show();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+        Toast.makeText(this, "file saved at " + dir, Toast.LENGTH_SHORT).show();
+        outStream.flush();
+        outStream.close();
+
+        Toast.makeText(MainActivity.this, "Saved", Toast.LENGTH_LONG).show();
+
+    } catch(Exception e){
+        // TODO Auto-generated catch block
+        Log.e("Eror",e.getCause()+"\n"+e.getLocalizedMessage());
+    }
+
 //        File file = new File(Environment.getExternalStorageDirectory()+"/my new");
 //        boolean success = true;
 //        if(!file.exists()) {
