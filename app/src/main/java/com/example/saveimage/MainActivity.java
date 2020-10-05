@@ -138,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         File f = Environment.getExternalStorageDirectory();
-
-        File dir = new File(f.getAbsolutePath(), "/DCIM/");
+        File dir = new File(f.getAbsolutePath(), "/DCIM/Pola/");
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
         File f1=new File(dir,System.currentTimeMillis()+".jpg");
         OutputStream outStream = new FileOutputStream(f1);
         Toast.makeText(this, "file saved at " + dir, Toast.LENGTH_SHORT).show();
